@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<templateBindings name="SD.TemplateBindings.SpannerSpecific.DDLSQL" description="Google Cloud Spanner specific template bindings for DDL SQL generation" 
+						precedenceLevel="10" databaseDriverID="00127E43-3911-4EA5-ABFF-7456C6349261" xmlns="http://sd/llblgen/pro/templateBindingsDefinition.xsd">
+	<supportedPlatforms>
+		<platform name="RDBMS"/>
+	</supportedPlatforms>
+	<supportedFrameworks>
+		<framework name="DDL SQL" />
+	</supportedFrameworks>
+	<language name="SQL">
+		<templateBinding templateID="SD_DDLSQL_AlterTableFieldInclude" filename="SpannerSpecific\DDLSQL\AlterTableFieldInclude.lpt" templateLanguage="C#" includeOnly="true" />
+		<templateBinding templateID="SD_DDLSQL_CreateCatalogInclude" filename="SpannerSpecific\DDLSQL\CreateCatalogInclude.lpt" templateLanguage="C#" includeOnly="true" />
+		<templateBinding templateID="SD_DDLSQL_CreateTableFieldInclude" filename="SpannerSpecific\DDLSQL\CreateTableFieldInclude.lpt" templateLanguage="C#" includeOnly="true" />
+		<templateBinding templateID="SD_DDLSQL_CreateTableInclude" filename="SpannerSpecific\DDLSQL\CreateTableInclude.lpt" templateLanguage="C#" includeOnly="true" />
+		<templateBinding templateID="SD_DDLSQL_DropDefaultValueInclude" filename="SpannerSpecific\DDLSQL\DropDefaultValueInclude.lpt" templateLanguage="C#" includeOnly="true" />
+		<templateBinding templateID="SD_DDLSQL_DropTableFieldInclude" filename="SpannerSpecific\DDLSQL\DropTableFieldInclude.lpt" templateLanguage="C#" includeOnly="true" />
+		<templateBinding templateID="SD_DDLSQL_DropTableInclude" filename="SpannerSpecific\DDLSQL\DropTableInclude.lpt" templateLanguage="C#" includeOnly="true" />
+		<templateBinding templateID="SD_DDLSQL_FieldCreationInclude" filename="SpannerSpecific\DDLSQL\FieldCreationInclude.lpt" templateLanguage="C#" includeOnly="true" />
+		<templateBinding templateID="SD_DDLSQL_RenameCatalogInclude" filename="SpannerSpecific\DDLSQL\RenameCatalogInclude.lpt" templateLanguage="C#" includeOnly="true" />
+		<templateBinding templateID="SD_DDLSQL_RenameTableFieldInclude" filename="SpannerSpecific\DDLSQL\RenameTableFieldInclude.lpt" templateLanguage="C#" includeOnly="true" />
+		<templateBinding templateID="SD_DDLSQL_RenameTableInclude" filename="SpannerSpecific\DDLSQL\RenameTableInclude.lpt" templateLanguage="C#" includeOnly="true" />
+		<templateBinding templateID="SD_DDLSQL_SetDefaultValueInclude" filename="SpannerSpecific\DDLSQL\SetDefaultValueInclude.lpt" templateLanguage="C#" includeOnly="true" />
+	</language>
+</templateBindings>

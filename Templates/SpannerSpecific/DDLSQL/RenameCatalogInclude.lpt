@@ -1,0 +1,3 @@
+﻿<% // The catalog to rename is in the variable 'catalog' %>
+EXEC sp_renamedb '[<%=GetOriginalName(catalog)%>]', '<%=GetNewName(catalog)%>'
+GO

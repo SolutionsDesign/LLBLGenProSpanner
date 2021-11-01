@@ -1,0 +1,2 @@
+﻿<% // the name of the catalog is in the variable 'catalogName'.%>
+CREATE DATABASE `<%=catalogName%>`;

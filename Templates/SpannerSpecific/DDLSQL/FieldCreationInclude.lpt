@@ -1,0 +1,46 @@
+﻿<~
+	// The enum definition for the Dbtypes as it is used by the SqlServer driver. Used here to determine in readable code
+	// if a field requires a length specification and/or collation specifications emitted in the DDL
+	public enum SpannerDbTypes
+	{
+		Bool,
+		Bytes,
+		Date,
+		Float64,
+		Int64,
+		String,
+		Timestamp,
+	}
+	
+	// Creates the string which defines the field, complete with name, type, identity (if applicable) and nullable/not nullable
+	private string CreateFieldDefinitionString(DBTableField field, bool appendAllowCommitTimestampIfApplicable=false)
+	{
+		StringBuilder toReturn = new StringBuilder();
+		toReturn.AppendFormat("`{0}`", field.FieldName);
+		toReturn.AppendFormat(" {0}", field.TypeDefinition.DBTypeAsString);
+		switch((SpannerDbTypes)field.TypeDefinition.DBType)
+		{
+			case SpannerDbTypes.String:
+			case SpannerDbTypes.Bytes:
+				if(field.TypeDefinition.Length > 0)
+				{
+					toReturn.AppendFormat("({0})", field.TypeDefinition.Length);
+				}
+				else
+				{
+					toReturn.Append("(MAX)");
+				}
+				break;
+		}
+		if(!field.IsNullable)
+		{
+			toReturn.Append(" NOT NULL");
+		}
+		string defaultValue = field.DefaultValue ?? string.Empty;
+		if(appendAllowCommitTimestampIfApplicable && field.TypeDefinition.DBType==(int)SpannerDbTypes.Timestamp && defaultValue=="allow_commit_timestamp")
+		{
+			toReturn.Append(" OPTIONS (allow_commit_timestamp = true)");
+		}
+		return toReturn.ToString();
+	}
+~>

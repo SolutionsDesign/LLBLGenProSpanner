@@ -1,0 +1,6 @@
+﻿<% // The table to rename is in the variable 'table'. The current schema is in the variable 'schema' %>
+-- !!!!!!!!!!!! WARNING !!!!!!!!!!!!!
+-- The table `<%=GetOriginalName(table)%>` was renamed to `<%=GetNewName(table)%>`
+-- Google Cloud Spanner doesn't support renaming a table. A workaround is to create a new table with the same schema, copy over the data and drop the original table. 
+-- This script can't do that for you as it requires more than just running a statement. 
+-- !!!!!!!!!!!! WARNING !!!!!!!!!!!!!

@@ -1,0 +1,3 @@
+﻿<% // The table name is in the variable 'tableName', the DBTableField object is in the variable 'field'.%>
+ALTER TABLE `<%=tableName%>`
+	ALTER COLUMN <%=CreateFieldDefinitionString(field)%>;

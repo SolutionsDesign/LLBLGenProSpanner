@@ -1,0 +1,20 @@
+﻿<% // the name of the catalog is in the variable 'catalogName', the name of the schema is in the variable 'schemaName'. The DBTable object
+   // is in the variable 'table'.%>
+CREATE TABLE `<%=table.Name%>`
+(
+	<%=string.Join(string.Format(", {0}\t", Environment.NewLine), table.Fields.Select(f=>CreateFieldDefinitionString(f, appendAllowCommitTimestampIfApplicable:true)).ToArray())%> 
+)
+PRIMARY KEY(<%=string.Join(", ", table.PrimaryKeyFields.OrderBy(f=>f.OrdinalPosition).Select(f=>string.Format("`{0}`", f.FieldName)).ToArray())%>)<%
+// check if the table has FK constaints which on the FK side contain only PK fields. If so, pick the first one and use that one as the interleave FK. 
+var interleaveFK = table.ForeignKeyConstraints.Where(fk=>fk.ForeignKeyFields.All(f=>f.IsPrimaryKey)).FirstOrDefault();
+if(interleaveFK!=null)
+{
+	var cascadeRule = "NO ACTION";
+	switch(interleaveFK.DeleteRuleAction)
+	{
+		case ForeignKeyRuleAction.Cascade:
+			cascadeRule = "CASCADE";
+			break;
+	}
+%>, INTERLEAVE IN PARENT `<%=interleaveFK.PKSide.Name %>` ON DELETE <%=cascadeRule%><%
+}%>;

@@ -1,0 +1,5 @@
+﻿<% // The field to rename is stored in the variable 'field'. The current schema is in the variable 'schema' %>
+-- !!!!!!!!!!!! WARNING !!!!!!!!!!!!!
+-- The field `<%=field.ParentTable.Name%>`.`<%=GetOriginalName(field)%>` was renamed to `<%=GetNewName(field)%>`
+-- Google Cloud Spanner doesn't support renaming a field. A work around that's quite complex can be found here: https://stackoverflow.com/questions/42506782/is-it-possible-to-rename-columns
+-- !!!!!!!!!!!! WARNING !!!!!!!!!!!!!
