@@ -1,0 +1,1 @@
+﻿	<PackageReference Include="SD.LLBLGen.Pro.DQE.Spanner" Version="<[LLBLGenProRuntimeVersion]>" />

@@ -1,0 +1,55 @@
+﻿		
+		/// <inheritdoc />
+		public override void StartTransaction(System.Data.IsolationLevel isolationLevelToUse, string name)
+		{
+			base.StartTransaction(isolationLevelToUse==System.Data.IsolationLevel.Unspecified ? isolationLevelToUse : System.Data.IsolationLevel.Serializable, name);
+		}
+
+		/// <inheritdoc />
+		public override System.Threading.Tasks.Task StartTransactionAsync(System.Data.IsolationLevel isolationLevelToUse, string name, System.Threading.CancellationToken cancellationToken)
+		{
+			return base.StartTransactionAsync(isolationLevelToUse==System.Data.IsolationLevel.Unspecified ? isolationLevelToUse : System.Data.IsolationLevel.Serializable, name, cancellationToken);
+		}
+
+		/// <inheritdoc />
+		protected override Func<List<DbCommand>, DbTransaction, IActionQuery> CreateActionQueryForPackedQueryFactoryFunc() => (l, t) => CreateBatchQuery(l, t);
+
+		private IActionQuery CreateBatchQuery(List<DbCommand> actionQueries, DbTransaction transaction) => new SpannerBatchActionQuery(transaction, actionQueries);
+		
+		/// <summary>Specific class for creating a Spanner ADO.NET specific batch query object from action queuries</summary>
+		public class SpannerBatchActionQuery : ActionQueryCore
+		{
+			private Google.Cloud.Spanner.Data.SpannerBatchCommand _wrappedCommand;
+
+			/// <summary>CTor</summary>
+			/// <param name="transactionToUse">The transaction to use for the batch statement. Can't be null</param>
+			/// <param name="actionQueries">The commands to add to the batch</param>
+			public SpannerBatchActionQuery(DbTransaction transactionToUse, List<DbCommand> actionQueries)
+			{
+				_wrappedCommand = ((Google.Cloud.Spanner.Data.SpannerTransaction)transactionToUse).CreateBatchDmlCommand();
+				foreach(var cmd in actionQueries)
+				{
+					_wrappedCommand.Add(cmd as Google.Cloud.Spanner.Data.SpannerCommand);
+				}
+			}
+			
+			/// <inheritdoc />
+			public override void SetCommandTimeout(int timeoutInterval)
+			{
+				_wrappedCommand.CommandTimeout = timeoutInterval;
+			}
+			/// <inheritdoc />
+			public override DbConnection Connection
+			{
+				get { return _wrappedCommand.Connection;}
+				set { throw new NotSupportedException("Connection is set through the ctor"); }
+			}
+			/// <inheritdoc />
+			public override async Task<int> ExecuteAsync(CancellationToken cancellationToken)
+			{
+				var results = await _wrappedCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+				return Convert.ToInt32(results.Sum());
+			}
+			/// <inheritdoc />
+			public override int Execute() => (int)_wrappedCommand.ExecuteNonQuery().Sum();
+		}

@@ -1,0 +1,10 @@
+﻿
+		/// <inheritdoc />
+		public override IsolationLevel TransactionIsolationLevel
+		{
+			get
+			{
+				var toReturn = base.TransactionIsolationLevel;
+				return toReturn == IsolationLevel.Unspecified ? toReturn : IsolationLevel.Serializable;
+			}
+		}

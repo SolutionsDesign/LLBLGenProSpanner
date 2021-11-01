@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<templateBindings name="SD.TemplateBindings.SpannerSpecific" description="Template bindings for the templates which are specific for Google Cloud Spanner based databases." precedenceLevel="10" xmlns="http://sd/llblgen/pro/templateBindingsDefinition.xsd">
+	<supportedPlatforms>
+		<platform name=".NET 4.5.2"/>
+		<platform name=".NET 4.6"/>
+	    <platform name=".NET 4.6.1" />
+	    <platform name=".NET 4.6.2" />
+		<platform name=".NET 4.7" />
+		<platform name=".NET 4.7.1" />
+		<platform name=".NET 4.7.2" />
+		<platform name=".NET 4.8.0" />
+		<platform name=".NET Standard 2.0"/>
+		<platform name=".NET Standard 2.1"/>
+	</supportedPlatforms>
+	<supportedFrameworks>
+		<framework name="LLBLGen Pro Runtime Framework" />
+	</supportedFrameworks>
+	<supportedDrivers>
+		<driver id="00127E43-3911-4EA5-ABFF-7456C6349261" />
+	</supportedDrivers>
+	<language name="C#">
+		<templateBinding templateID="SD_TransactionIsolationLevelIncludeTemplate" filename="SpannerSpecific\C#\transactionILInclude.template" templateLanguage="TDL" />
+		<templateBinding templateID="SD_DQENamespaceIncludeTemplate" filename="SpannerSpecific\C#\dqeNamespaceInclude.template" templateLanguage="TDL" />
+		<templateBinding templateID="SD_DQEReferenceXmlIncludeTemplate" filename="SpannerSpecific\Shared\dqeReferenceXmlInclude.template" templateLanguage="TDL" />
+		<templateBinding templateID="SD_DbSpecificDataAccessAdapterIncludeTemplate" filename="SpannerSpecific\C#\daaAdapterInclude.template" templateLanguage="TDL" />
+		<templateBinding templateID="SD_DbSpecificPackageReferenceIncludeTemplate" filename="SpannerSpecific\Shared\SpannerPackageInclude.template" includeOnly="true"  templateLanguage="TDL"/>
+	</language>
+	<language name="VB.NET">
+		<templateBinding templateID="SD_TransactionIsolationLevelIncludeTemplate" filename="SpannerSpecific\VB.NET\transactionILInclude.template" templateLanguage="TDL" />
+		<templateBinding templateID="SD_DQENamespaceIncludeTemplate" filename="SpannerSpecific\VB.NET\dqeNamespaceInclude.template" templateLanguage="TDL" />
+		<templateBinding templateID="SD_DQEReferenceXmlIncludeTemplate" filename="SpannerSpecific\Shared\dqeReferenceXmlInclude.template" templateLanguage="TDL" />
+		<templateBinding templateID="SD_DbSpecificDataAccessAdapterIncludeTemplate" filename="SpannerSpecific\VB.NET\daaAdapterInclude.template" templateLanguage="TDL" />
+		<templateBinding templateID="SD_DbSpecificPackageReferenceIncludeTemplate" filename="SpannerSpecific\Shared\SpannerPackageInclude.template" includeOnly="true"  templateLanguage="TDL"/>
+	</language>
+</templateBindings>

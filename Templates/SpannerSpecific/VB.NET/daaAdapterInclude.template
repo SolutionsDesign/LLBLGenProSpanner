@@ -1,0 +1,60 @@
+﻿		
+		''' <inheritdoc />
+		Public Overrides Sub StartTransaction(isolationLevelToUse as System.Data.IsolationLevel, name as String)
+			MyBase.StartTransaction(If(isolationLevelToUse=System.Data.IsolationLevel.Unspecified, isolationLevelToUse, System.Data.IsolationLevel.Serializable), name)
+		End Sub
+
+
+		''' <inheritdoc />
+		Public Overrides Function StartTransactionAsync(isolationLevelToUse as System.Data.IsolationLevel, name as String, cancellationToken As System.Threading.CancellationToken) As System.Threading.Tasks.Task 
+			Return MyBase.StartTransactionAsync(If(isolationLevelToUse=System.Data.IsolationLevel.Unspecified, isolationLevelToUse, System.Data.IsolationLevel.Serializable), name, cancellationToken)
+		End Function 
+
+		''' <inheritdoc />
+		Protected Overrides Function CreateActionQueryForPackedQueryFactoryFunc() As Func(Of List(Of DbCommand), DbTransaction, IActionQuery)
+			Return Function(l, t) CreateBatchQuery(l, t)
+		End Function
+
+		Private Function CreateBatchQuery(actionQueries As List(Of DbCommand), transaction As DbTransaction) As IActionQuery 
+			Return new SpannerBatchActionQuery(transaction, actionQueries)
+		End Function
+		
+		''' <summary>Specific class for creating a Spanner ADO.NET specific batch query object from action queuries</summary>
+		Public Class SpannerBatchActionQuery 
+			Inherits ActionQueryCore
+		
+			Dim _wrappedCommand As Google.Cloud.Spanner.Data.SpannerBatchCommand
+
+			''' <summary>CTor</summary>
+			''' <param name="transactionToUse">The transaction to use for the batch statement. Can't be null</param>
+			''' <param name="actionQueries">The commands to add to the batch</param>
+			Public Sub New(transactionToUse As DbTransaction, actionQueries As List(Of DbCommand))
+				_wrappedCommand = CType(transactionToUse, Google.Cloud.Spanner.Data.SpannerTransaction).CreateBatchDmlCommand()
+				For Each cmd in actionQueries
+					_wrappedCommand.Add(CType(cmd, Google.Cloud.Spanner.Data.SpannerCommand))
+				Next
+			End Sub
+			
+			''' <inheritdoc />
+			Public overrides Sub SetCommandTimeout(timeoutInterval As Integer)
+				_wrappedCommand.CommandTimeout = timeoutInterval
+			End Sub
+			''' <inheritdoc />
+			Public Overrides Property Connection As DbConnection 
+				Get 
+					Return _wrappedCommand.Connection
+				End Get
+				Set 
+					Throw New NotSupportedException("Connection is set through the ctor") 
+				End Set
+			End Property
+			''' <inheritdoc />
+			Public Overrides Async Function ExecuteAsync(cancellationToken As CancellationToken) As Task(Of integer)
+				Dim results = Await _wrappedCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false)
+				Return Convert.ToInt32(results.Sum())
+			End Function
+			''' <inheritdoc />
+			Public Overrides Function Execute() As Integer
+				Return CInt(_wrappedCommand.ExecuteNonQuery().Sum())
+			End Function
+		End Class

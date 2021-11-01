@@ -1,0 +1,8 @@
+﻿
+		''' <inheritdoc />
+		Public Overrides ReadOnly Property TransactionIsolationLevel As IsolationLevel 
+			Get
+				Dim toReturn = MyBase.TransactionIsolationLevel
+				Return If(toReturn = IsolationLevel.Unspecified, toReturn, IsolationLevel.Serializable)
+			End Get
+		End Property
